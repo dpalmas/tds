@@ -1,6 +1,6 @@
 # quero_marmita
 
-A new Flutter project.
+Quero-Marmita aplicação Flutter da disiciplina de Tecnologia de Desenvolvimento em Sistemas.
 
 ## Getting Started
 

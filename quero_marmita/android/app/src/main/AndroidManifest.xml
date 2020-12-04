@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.quero_marmita">
+    package="com.quero_marmita">
    <application
         android:label="quero_marmita"
         android:icon="@mipmap/ic_launcher">
