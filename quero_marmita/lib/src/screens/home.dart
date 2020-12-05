@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quero_marmita/src/widgets/categories.dart';
 import 'package:quero_marmita/src/widgets/custom_text.dart';
+import 'package:quero_marmita/src/widgets/featured_products.dart';
 
 import '../commons.dart';
 
@@ -82,35 +83,32 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.all(8.0),
               child: CustomText(text: "Produtos em Destaque", size: 20, color: grey,),
             ),
+            Featured(),
+          ],
+        ),
+      ),
 
-            Container(
-              height: 220,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 2,
-                itemBuilder: (_, index){
-                return Padding(padding: EdgeInsets.all(8),
-                  child: Container(
-                    height: 220,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      color: white,
-                      boxShadow: [
-                        BoxShadow(
-                            color: grey,
-                            offset: Offset(1, 1),
-                            blurRadius: 4
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        Image.asset("images/marmita3.png", height: 140,)
-                      ],
-                    ),
-                  ),);
-              },),
-            )
+      bottomNavigationBar: Container(
+        color: white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset("images/home.png", width: 26, height: 26,),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset("images/target.png", width: 26, height: 26,),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset("images/shoppingcart.png", width: 26, height: 26,),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset("images/account.png", width: 26, height: 26,),
+            ),
           ],
         ),
       ),

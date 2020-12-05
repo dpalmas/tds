@@ -8,6 +8,8 @@ List<Category> categoriesList = [
   Category(name: "Marmitas", image: "marmita.png"),
   Category(name: "Bebidas", image: "bebidas.png"),
   Category(name: "Sobremesas", image: "sobremesas.png"),
+  Category(name: "Lanches", image: "fastfood.png"),
+  Category(name: "Sorvetes", image: "sorvetes.png"),
 ];
 
 class Categories extends StatelessWidget {
@@ -35,10 +37,10 @@ class Categories extends StatelessWidget {
                         ],
                       ),
                       child: Padding(padding: EdgeInsets.all(4),
-                        child: Image.asset("images/${categoriesList[index].image}", width: 95,),)
+                        child: Image.asset("images/${categoriesList[index].image}", width: 60,),)
                   ),
                   SizedBox(height: 10,),
-                  CustomText(text: categoriesList[index].name, size: 14, color: black,)
+                  CustomText(text: categoriesList[index].name, size: 12, color: black,)
                 ],
               ),
             );
