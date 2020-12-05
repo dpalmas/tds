@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quero_marmita/src/widgets/title.dart';
+import 'package:quero_marmita/src/widgets/categories.dart';
+import 'package:quero_marmita/src/widgets/custom_text.dart';
 
 import '../commons.dart';
 
@@ -74,28 +75,41 @@ class _HomeState extends State<Home> {
             SizedBox(
               height: 5,
             ),
+
+            Categories(),
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomText(text: "Produtos em Destaque", size: 20, color: grey,),
+            ),
+
             Container(
-              height: 120,
-              child: Column(
-                children: <Widget>[
-                  Container(
+              height: 220,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 2,
+                itemBuilder: (_, index){
+                return Padding(padding: EdgeInsets.all(8),
+                  child: Container(
+                    height: 220,
+                    width: 200,
                     decoration: BoxDecoration(
                       color: white,
                       boxShadow: [
                         BoxShadow(
-                            color: orange,
-                            offset: Offset(4, 6),
-                            blurRadius: 20
+                            color: grey,
+                            offset: Offset(1, 1),
+                            blurRadius: 4
                         ),
                       ],
                     ),
-                    child: Padding(padding: EdgeInsets.all(4),
-                    child: Image.asset("images/marmita.png", width: 100,),)
-                  ),
-                  SizedBox(height: 5,),
-                  CustomText(text: "Marmitas",)
-                ],
-              )
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset("images/marmita3.png", height: 140,)
+                      ],
+                    ),
+                  ),);
+              },),
             )
           ],
         ),
