@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quero_marmita/src/widgets/categories.dart';
 import 'package:quero_marmita/src/widgets/custom_text.dart';
 import 'package:quero_marmita/src/widgets/featured_products.dart';
+import 'package:quero_marmita/src/widgets/small_floating_button.dart';
 
 import '../commons.dart';
 
@@ -84,7 +85,57 @@ class _HomeState extends State<Home> {
               child: CustomText(text: "Produtos em Destaque", size: 20, color: grey,),
             ),
             Featured(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomText(text: "Popular", size: 20, color: grey,),
+            ),
+            Padding(
+              padding: EdgeInsets.all(2),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40)
+                    ),
+                    child: Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.asset("images/marmita6.png")),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                      SmallButton(Icons.favorite),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 50,
+                          decoration: BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.circular(5)
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Icon(Icons.star, color: Colors.yellow, size: 20)
+                              ),
+                              Text("4.5")
+                            ],
+                          ),
+                          ),
+                      ),
+                ],
+              ),
+            )
           ],
+        ),
+      ),
+      ],
         ),
       ),
 
