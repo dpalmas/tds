@@ -1,9 +1,21 @@
-import 'package:doe_marmita/restaurant.dart';
-import 'package:doe_marmita/starDisplay.dart';
+import 'package:doe_marmita/data/data.dart';
+import 'package:doe_marmita/pages/login.dart';
+import 'package:doe_marmita/pages/restaurant.dart';
+import 'package:doe_marmita/pages/starDisplay.dart';
+
 import 'package:flutter/material.dart';
 
+import 'models/item_model.dart';
+
 void main() => runApp(MyApp());
-List<String> buttonsTitle = ["Todos", "Popular", "Sobremesa", "Bebidas", "Lanches"];
+List<String> buttonsTitle = [
+  "Todos",
+  "Popular",
+  "Sobremesa",
+  "Bebidas",
+  "Lanches"
+];
+
 List<String> restaurantList = [
   "Marmita Bênto",
   "Marmita Tradicional",
@@ -12,7 +24,6 @@ List<String> restaurantList = [
 ];
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,15 +34,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.orange,
         fontFamily: 'Montserrat',
       ),
-      home: Home(),
-      routes: {
-        'restaurant': (ctx) => RestaurantPage(),
-      },
+      home: LoginPage(),
     );
   }
 }
 
 class Home extends StatelessWidget {
+  final controller = Data();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +93,7 @@ class Home extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("07/12/2020"),
+                          Text("08/12/2020"),
                           Text(
                             "Seja solidário! Doe uma Marmita!",
                             style: TextStyle(
@@ -93,7 +102,8 @@ class Home extends StatelessWidget {
                         ],
                       ),
                       CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/profile.jpg"),
+                        backgroundImage:
+                            AssetImage("assets/images/profile.jpg"),
                       ),
                     ],
                   ),
@@ -112,11 +122,30 @@ class Home extends StatelessWidget {
                 SizedBox(height: 15.0),
                 Container(
                   height: 275,
-                  child: ListView.builder(
-                    itemCount: 5,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, id) {
-                      return LargeContainer();
+                  child: FutureBuilder(
+                    future: controller.getItems(),
+                    initialData: List<Item>(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Item>> snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                          break;
+
+                        case ConnectionState.done:
+                          return ListView.builder(
+                            itemCount: 5,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, id) {
+                              return LargeContainer(item: snapshot.data[id]);
+                            },
+                          );
+                          break;
+                        default:
+                          return Container();
+                      }
                     },
                   ),
                 ),
@@ -188,10 +217,18 @@ class Home extends StatelessWidget {
 }
 
 class LargeContainer extends StatelessWidget {
+  final Item item;
+
+  const LargeContainer({Key key, @required this.item}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, 'restaurant'),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RestaurantPage(item: item),
+        ),
+      ),
       child: Container(
         width: MediaQuery.of(context).size.width / 1.5,
         decoration: BoxDecoration(
@@ -211,14 +248,15 @@ class LargeContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ClipRRect(
-              child: Image.asset("assets/images/marmita2.png"),
+              // child: Image.asset("assets/images/marmita2.png"),
+              child: Image.network(item?.imgUrl),
               borderRadius: BorderRadius.circular(15.0),
             ),
             SizedBox(
               height: 9.0,
             ),
             Text(
-              "Marmita Tradicional",
+              item?.title ?? '',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 19.0,
@@ -234,7 +272,7 @@ class LargeContainer extends StatelessWidget {
                   color: Colors.grey[400],
                 ),
                 Text(
-                  "3km até o local",
+                  "${item?.range}km até o local",
                   style: TextStyle(
                     color: Colors.grey[400],
                   ),
@@ -244,7 +282,7 @@ class LargeContainer extends StatelessWidget {
                   flex: 3,
                   child: FittedBox(
                     child: StarDisplay(
-                      value: 4,
+                      value: 5,
                     ),
                   ),
                 )
@@ -258,8 +296,9 @@ class LargeContainer extends StatelessWidget {
 }
 
 class SmallContainer extends StatelessWidget {
+  final Item item;
   final String text;
-  const SmallContainer({Key key, this.text}) : super(key: key);
+  const SmallContainer({Key key, this.text, this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -283,11 +322,10 @@ class SmallContainer extends StatelessWidget {
               ),
             ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
             children: <Widget>[
               ClipRRect(
-                child: Image.asset("assets/images/marmita.png"),
+                child: Image.asset("assets/images/marmita2.png"),
                 borderRadius: BorderRadius.circular(15.0),
               ),
               SizedBox(
@@ -312,7 +350,7 @@ class SmallContainer extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    "5.0",
+                    "${item?.star?.toStringAsFixed(2) ?? 5.toStringAsFixed(1)}",
                     style: TextStyle(
                       color: Colors.grey[700],
                     ),
@@ -320,7 +358,7 @@ class SmallContainer extends StatelessWidget {
                   Spacer(),
                   Icon(
                     Icons.favorite,
-                    color: Colors.grey[400],
+                    color: Colors.red[400],
                   )
                 ],
               )
@@ -335,7 +373,7 @@ class SmallContainer extends StatelessWidget {
 class MyCustomButton extends StatelessWidget {
   final bool active;
   final String title;
-  final onTap;
+  final Function onTap;
   const MyCustomButton({Key key, this.active, this.title, this.onTap})
       : super(key: key);
 
@@ -358,10 +396,10 @@ class MyCustomButton extends StatelessWidget {
             boxShadow: [
               active
                   ? BoxShadow(
-                color: Colors.yellow,
-                offset: Offset(0, 3),
-                blurRadius: 5.0,
-              )
+                      color: Colors.yellow,
+                      offset: Offset(0, 3),
+                      blurRadius: 5.0,
+                    )
                   : BoxShadow()
             ],
           ),
